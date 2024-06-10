@@ -10,7 +10,7 @@ import '../bloc/detail_item_bloc/detail_item_bloc.dart';
 class CheckoutPage extends StatefulWidget {
   final ItemModel item;
 
-  const CheckoutPage({super.key, required this.item});
+  const CheckoutPage({Key? key, required this.item}) : super(key: key);
 
   @override
   State<CheckoutPage> createState() => _CheckoutPageState();
@@ -18,32 +18,39 @@ class CheckoutPage extends StatefulWidget {
 
 class _CheckoutPageState extends State<CheckoutPage> {
   int _quantity = 1;
-  int _totalPrice = 1;
-
-  void _incrementCounter() {
-    setState(() {
-      if (_quantity < widget.item.quantity) {
-        _quantity += 1;
-        _totalPrice =
-            _quantity * widget.item.price;
-      }
-    });
-  }
-
-  void _decrementCounter() {
-    setState(() {
-      if (_quantity > 1) {
-        _quantity -= 1;
-        _totalPrice =
-            _quantity * widget.item.price;
-      }
-    });
-  }
+  int _totalPrice = 0;
 
   @override
   void initState() {
     super.initState();
-    _totalPrice = widget.item.price;
+    _updateTotalPrice();
+  }
+
+  // Memperbarui harga total berdasarkan jumlah barang
+  void _updateTotalPrice() {
+    setState(() {
+      _totalPrice = _quantity * widget.item.price;
+    });
+  }
+
+  // Menambah jumlah barang
+  void _incrementCounter() {
+    setState(() {
+      if (_quantity < widget.item.quantity) {
+        _quantity += 1;
+        _updateTotalPrice();
+      }
+    });
+  }
+
+  // Mengurangi jumlah barang
+  void _decrementCounter() {
+    setState(() {
+      if (_quantity > 1) {
+        _quantity -= 1;
+        _updateTotalPrice();
+      }
+    });
   }
 
   @override
@@ -62,124 +69,155 @@ class _CheckoutPageState extends State<CheckoutPage> {
             showOkAlertDialog(
               context: context,
               title: "Success",
-              message: "Congrats! Your order is on its way!",
+              message: "Terimakasih sudah melakukan pesanan!",
             );
           }
         },
         child: BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Card(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CachedNetworkImage(
-                                imageUrl: widget.item.image,
-                                width: 160,
-                              ),
-                              Column(
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * (9 / 10),
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
                                 children: [
-                                  Text(
-                                    widget.item.name,
-                                    style: const TextStyle(
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      CachedNetworkImage(
+                                        imageUrl: widget.item.image,
+                                        width: 160,
+                                      ),
+                                      const SizedBox(width: 20),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              widget.item.name,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20.0,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              'Rp.${widget.item.price}',
+                                              style: const TextStyle(fontSize: 15),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Row(
+                                              children: [
+                                                IconButton(
+                                                  icon: const Icon(Icons.remove),
+                                                  onPressed: _decrementCounter,
+                                                ),
+                                                Text(
+                                                  _quantity.toString(),
+                                                  style: const TextStyle(fontSize: 16),
+                                                ),
+                                                IconButton(
+                                                  icon: const Icon(Icons.add),
+                                                  onPressed: _incrementCounter,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * (9 / 10),
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  const Text(
+                                    "From",
+                                    style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18.0,
                                     ),
                                   ),
-                                  Text('Rp.${widget.item.price}'),
-                                  Card(
-                                    elevation: 4,
-                                    child: Row(
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(Icons.remove),
-                                          onPressed: () => _decrementCounter(),
-                                        ),
-                                        Text(_quantity.toString()),
-                                        IconButton(
-                                          icon: const Icon(Icons.add),
-                                          onPressed: () => _incrementCounter(),
-                                        ),
-                                      ],
+                                  Text(widget.item.sellerName ?? ""),
+                                  Text(widget.item.sellerEmail ?? ""),
+                                  Text(widget.item.sellerAddress ?? ""),
+                                  const SizedBox(height: 20),
+                                  const Text(
+                                    "To",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
                                     ),
-                                  )
+                                  ),
+                                  Text(state.user?.name ?? ""),
+                                  Text(state.user?.address ?? ""),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                        Card(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Text(
-                                "From",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(widget.item.sellerName ?? ""),
-                              Text(widget.item.sellerEmail ?? ""),
-                              Text(widget.item.sellerAddress ?? ""),
-                              const SizedBox(height: 20),
-                              const Text(
-                                "To",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(state.user?.name ?? ""),
-                              Text(state.user?.address ?? ""),
-                            ],
-                          ),
-                        ),
-                        Card(
-                          child: Row(
-                            children: [
-                              Column(
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * (9 / 10),
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
-                                    "Total Price",
+                                    "Total Price:",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Text('Rp.${_totalPrice.toString()}')
+                                  Text(
+                                    'Rp.${_totalPrice.toString()}',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                Container(
+                Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: FilledButton(
-                          onPressed: () {
-                            setState(() {
-                              context.read<DetailItemBloc>().add(
-                                BuyItem(
-                                  itemId: widget.item.id!,
-                                  quantity: _quantity,
-                                ),
-                              );
-                            });
-                          },
-                          child: const Text("Pay Now"),
-                        ),
-                      ),
-                    ],
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<DetailItemBloc>().add(
+                            BuyItem(
+                              itemId: widget.item.id!,
+                              quantity: _quantity,
+                            ),
+                          );
+                    },
+                    child: const Text(
+                      "Pay Now",
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
                 ),
               ],

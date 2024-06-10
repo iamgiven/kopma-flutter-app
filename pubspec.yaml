@@ -1,5 +1,5 @@
 name: kopma
-description: "kopmaaaa"
+description: "kopma"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -88,10 +88,10 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "icon.png"
+  image_path: "assets/icon.png"
   web:
     generate: true
-    image_path: "icon.png"
+    image_path: "assets/icon.png"
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

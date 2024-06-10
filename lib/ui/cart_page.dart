@@ -65,7 +65,7 @@ class _CartPageState extends State<CartPage> {
     });
 
     cartDataSource.updateItemQuantity(item.id, itemIdFirebase!, newQuantity);
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     _totalCartPriceRefresh();
   }
 
@@ -187,8 +187,8 @@ class _CartPageState extends State<CartPage> {
                               ],
                             ),
                             Positioned(
-                              top: 0,
-                              right: 0,
+                              top: -10,
+                              right: -10,
                               child: IconButton(
                                 icon: const Icon(Icons.delete, color: Colors.red),
                                 onPressed: () {

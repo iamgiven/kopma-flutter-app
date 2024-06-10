@@ -42,7 +42,7 @@ class _DetailItemPageState extends State<DetailItemPage> {
             showOkAlertDialog(
                 context: context,
                 title: "Success",
-                message: "Nailed it! ${state.item?.name} is chilling in your cart.");
+                message: "Item yang kamu pilih sudah dimasukkan ke keranjang :)");
             context.read<DetailItemBloc>().add(GetDetailItem(itemId: widget.idItem));
           } else if (state is BuyItemSuccess) {
             context.read<DetailItemBloc>().add(GetDetailItem(itemId: widget.idItem));
@@ -59,69 +59,80 @@ class _DetailItemPageState extends State<DetailItemPage> {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Card(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Hero(
-                                tag: state.item?.id ?? "",
-                                child: CachedNetworkImage(
-                                  imageUrl: state.item?.image ?? "",
-                                  width: MediaQuery.of(context).size.width * (2/3),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      state.item?.name ?? "",
-                                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
-                                    ),
-                                    Text('Rp.${state.item?.price.toString() ?? ""}'),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * (9 / 10),
+                          child: Card(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ListTile(
-                                  title: const Text("Category", style: TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text(state.item?.category ?? ""),
+                                Hero(
+                                  tag: state.item?.id ?? "",
+                                  child: CachedNetworkImage(
+                                    imageUrl: state.item?.image ?? "",
+                                    width: MediaQuery.of(context).size.width * (2 / 3),
+                                  ),
                                 ),
-                                const Divider(),
-                                ListTile(
-                                  title: const Text("Description", style: TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text(state.item?.description ?? ""),
-                                ),
-                                const Divider(),
-                                ListTile(
-                                  title: const Text("Stock", style: TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text(state.item?.quantity.toString() ?? ""),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        state.item?.name ?? "",
+                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+                                      ),
+                                      Text('Rp.${state.item?.price.toString() ?? ""}'),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                ListTile(
-                                  title: Text(state.item?.sellerName ?? ""),
-                                  subtitle: Text(state.item?.sellerAddress ?? ""),
-                                ),
-                              ],
+                        const SizedBox(height: 8), // Menambahkan jarak antar SizedBox
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * (9 / 10),
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  ListTile(
+                                    title: const Text("Category", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    subtitle: Text(state.item?.category ?? ""),
+                                  ),
+                                  const Divider(),
+                                  ListTile(
+                                    title: const Text("Description", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    subtitle: Text(state.item?.description ?? ""),
+                                  ),
+                                  const Divider(),
+                                  ListTile(
+                                    title: const Text("Stock", style: TextStyle(fontWeight: FontWeight.bold)),
+                                    subtitle: Text(state.item?.quantity.toString() ?? ""),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8), // Menambahkan jarak antar SizedBox
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * (9 / 10),
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  ListTile(
+                                    title: Text(state.item?.sellerName ?? ""),
+                                    subtitle: Text(state.item?.sellerAddress ?? ""),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
