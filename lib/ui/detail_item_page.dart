@@ -42,7 +42,7 @@ class _DetailItemPageState extends State<DetailItemPage> {
             showOkAlertDialog(
                 context: context,
                 title: "Success",
-                message: "Item yang kamu pilih sudah dimasukkan ke keranjang :)");
+                message: "Pilihan yang bagus! Silakan cek di keranjang :)");
             context.read<DetailItemBloc>().add(GetDetailItem(itemId: widget.idItem));
           } else if (state is BuyItemSuccess) {
             context.read<DetailItemBloc>().add(GetDetailItem(itemId: widget.idItem));
